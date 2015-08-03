@@ -1,0 +1,33 @@
+{
+  "name": "to-json",
+  "version": "0.0.0",
+  "description": "Convert arbitrary types to json while providing mappings between the original data and the generated json",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/gulp test",
+    "prepublish": "node_modules/.bin/gulp test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "coffee-coverage": "^0.6.2",
+    "coffee-script": "^1.9.3",
+    "cson": "^3.0.1",
+    "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-coffeelint": "^0.5.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-mirror": "^0.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-spawn-mocha": "^2.2.1",
+    "gulp-uglify": "^1.2.0",
+    "gulp-umd": "git+https://github.com/WHenderson/gulp-umd.git",
+    "gulp-util": "^3.0.6",
+    "lazypipe": "^1.0.1",
+    "lodash": "^3.10.0",
+    "mocha": "^2.2.5"
+  }
+}
