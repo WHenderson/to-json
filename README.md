@@ -120,9 +120,9 @@ var json = context.apply();
 Exclude unwanted input data from being returned in the json output.
 to-json supports exclusions at each of the following stages:
 
-* immediately (_exclude) - Has access to the context, input data, and mapping keys
-* after data conversion (_excludeData) - Has access to the context, converted input data, and mapping keys
-* after conversion to json (_excludeJson) - Has access to the context, converted input data, mapping keys and json output
+* immediately (`_exclude`) - Has access to the context, input data, and mapping keys
+* after data conversion (`_excludeData`) - Has access to the context, converted input data, and mapping keys
+* after conversion to json (`_excludeJson`) - Has access to the context, converted input data, mapping keys and json output
 
 ```js
 // Custom usage requires access to the context
@@ -181,10 +181,10 @@ var json = context.apply();
 Customise the way incoming data is enumerated.
 Enumeration can be customised for:
 
-* Arrays  (_getEnumeratorArray)
-* Objects (_getEnumeratorObject)
-* Values  (_getEnumeratorValue)
-* ..or everything at once (_getEnumerator)
+* Arrays  (`_getEnumeratorArray`)
+* Objects (`_getEnumeratorObject`)
+* Values  (`_getEnumeratorValue`)
+* ..or everything at once (`_getEnumerator`)
 
 ```js
 // Custom usage requires access to the context
