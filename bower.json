@@ -1,0 +1,37 @@
+{
+  "name": "to-json",
+  "main": [
+    "lib/to-json.coffee",
+    "lib/to-json-node.js",
+    "lib/to-json-umd.js",
+    "lib/to-json-umd.min.js",
+    "lib/to-json-web.js",
+    "lib/to-json-web.min.js"
+  ],
+  "version": "0.2.0-prerelease",
+  "homepage": "https://github.com/WHenderson/to-json",
+  "authors": [
+    "WHenderson <whenderson.github@gmail.com>"
+  ],
+  "description": "Provides a consistent mechanism for mapping complex javascript data to json. This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "json",
+    "mapping",
+    "convert",
+    "conversion"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "coverage",
+    "test",
+    "tests"
+  ]
+}
