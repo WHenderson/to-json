@@ -1,10 +1,7 @@
 # to-json
 
-The repository provides a consistent mechanism for mapping javascript to json.
+to-json provides a consistent mechanism for mapping complex javascript data to json.
 This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.
-
-This project has been created with the specific intention of providing data for web services and json schemas
-whilst maintaining enough contextual information that errors in the json data can be mapped back to the originating data easily.
 
 ## Installation
 
@@ -20,18 +17,18 @@ whilst maintaining enough contextual information that errors in the json data ca
 ```js
 var toJson = require('to-json');
 
-console.log(toJson([1,2,3]))
+console.log(toJson([1,2,3]));
 ```
 
 ### web (global)
 ```html
 <html>
     <head>
-        <script src="to-json.min.js"></script>
+        <script type="text/javascript" src="to-json.min.js"></script>
     </head>
     <body>
         <script>
-            alert(toJson([1,2,3]));
+            console.log(toJson([1,2,3]));
         </script>
     </body>
 </html>
@@ -40,20 +37,70 @@ console.log(toJson([1,2,3]))
 ### web (amd)
 ```js
 require(['to-json'], function (toJson) {
-    alert(toJson([1,2,3]));
+    console.log(toJson([1,2,3]));
 })
 ```
 
-### Simple Usage
+## Simple Usage
 Convert data to json using default mappers and direct copies.
 When converting data, the toJson and toJSON methods are used wherever they are found.
 
 ```js
-json = toJson([1,2,3])
+var json = toJson([1,2,3]);
 ```
 
+## Advanced Usage
+Customise the mapping process before converting data to json.
+
+```js
+context = new toJson([1,2,3]);
+
+// customise the context
+
+var json = context.apply();
+```
+
+### Customisation
+It is often desirable to adjust the mapping process at various levels within the process.
+Mapping overrides can be applied at the following levels
+
+#### Only to the current context
+```js
+context._toJson = ...
+```
+or
+```js
+context.adjustContext({
+  _toJson: ...
+});
+```
+
+#### Only to the current context and immediate child contexts
+```js
+context.adjustChildContexts({
+  _toJson: ...
+});
+```
+
+#### Only to the current nodes decedents
+```js
+context.adjustChildContexts({
+  _toJson: ...
+}, true);
+```
+
+#### To the current node and all its decedents
+```js
+context.adjustContext({
+  _toJson: ...
+}, true);
+```
+## Available customisations
+The following customisations can be applied at any of the levels mentioned above.
+
 ### Custom naming
-Rename input data object keys before they are mapped to the json output.
+By default, json object keys are identical to the keys in the source data.
+Change this method to customise the key name used in the json output.
 
 ```js
 // Custom usage requires access to the context
@@ -69,13 +116,13 @@ var json = context.apply();
 // { A: 1, B: 2 }
 ```
 
-### Custom filtering
-Exclude unwanted data.
-to-json supports exclusions at the following stages:
+### Filtering
+Exclude unwanted input data from being returned in the json output.
+to-json supports exclusions at each of the following stages:
 
-* immediately (_exclude)
-* after data conversion (_excludeData)
-* after conversion to json (_excludeJson)
+* immediately (_exclude) - Has access to the context, input data, and mapping keys
+* after data conversion (_excludeData) - Has access to the context, converted input data, and mapping keys
+* after conversion to json (_excludeJson) - Has access to the context, converted input data, mapping keys and json output
 
 ```js
 // Custom usage requires access to the context
@@ -92,7 +139,7 @@ var json = context.apply();
 // ['a','c']
 ```
 
-### Custom data conversion
+### Data conversion
 Convert incoming data before it is converted to json.
 ```js
 // Custom usage requires access to the context
@@ -109,7 +156,7 @@ var json = context.apply();
 // [0,2,4,6,8]
 ```
 
-### Custom json conversion
+### Json conversion
 Convert outgoing json data.
 ```js
 // Custom usage requires access to the context
@@ -130,7 +177,7 @@ var json = context.apply();
 // [0,2,4,6,8]
 ```
 
-### Custom data enumeration
+### Input data enumeration
 Customise the way incoming data is enumerated.
 Enumeration can be customised for:
 
@@ -140,6 +187,37 @@ Enumeration can be customised for:
 * ..or everything at once (_getEnumerator)
 
 ```js
+// Custom usage requires access to the context
+var context = new toJson([0,1,2,3,4]);
+
+// Return a callback for iterating over arrays which skips the first element
+context._getEnumerator = function () {
+  var _this = this;
+  return function (cb) {
+    var i,length = _this.data.length;
+    // Set the output json
+    _this.json = [];
+    for (i = 1; i < length; ++i) {
+      // cb(value, dataKey, jsonKey)
+      cb(_this.data[i], i, _this.json.length);
+    }
+    // Return the resulting json
+    return _this.json;
+  };
+}
+
+var json = context.apply();
+// [0,1,2,3]
+```
+
+## Classes / Prototypes
+
+When enumerating input data, to-json checks for the presence of toJson(context) and toJSON() functions.
+If either is found, the result of those functions is used to provide data to json mappings.
+
+By overriding these methods, classes can customise their data-to-json mapping process in a standardised way
+
+```js
 // Example class
 function MyObject() {
   this.a = 1;
@@ -147,84 +225,15 @@ function MyObject() {
 }
 MyObject.prototype.c = 3;
 
-// Custom usage requires access to the context
-var context = new toJson(new MyObject());
-
-// Customise object enumerator to include all members, both instance and prototype
-context._getEnumeratorObject = function () {
-  var _this = this;
-  return function (cb) {
-    _this.json = {};
-    for (var key in _this.data) {
-      // Include all members. Do not filter with hasOwnProperty
-      cb(_this.data[key], key, _this._getJsonKey(key));
-    }
-    return _this.json;
-  }
-}
-
-var json = context.apply();
-// { a: 1, b: 2, c: 3 }
-```
-
-### Simple json mapping class customisation
-Add a method to your class which will automatically be called when mapping instances to json
-```js
-function MyClass() {
-  this.a = 1;
-  this.A = 2;
-}
-MyClass.prototype.toJSON = function () {
-  return 'my custom value';
-};
-
-var json = toJson(new MyClass());
-// 'my custom value'
-
-```
-
-### Advanced json mapping class customisation
-Add a method to your class to customise the way in which it maps instances to json
-```js
-function MyClass() {
-  this.a = 1;
-  this.A = 2;
-}
-MyClass.prototype.toJSON = function () {
+MyObject.prototype.toJSON = function () {
   return toJson(this);
-};
-MyClass.prototype.toJson = function (context) {
-  var _this = this;
-  context._getEnumeratorObject = function () {
-    var _this = this;
-    return function (cb) {
-      _this.json = {};
-      for (var key in _this.data) {
-        if (!{}.hasOwnProperty.call(_this.data, key))
-          continue;
-
-        if (key.toUpperCase() != key)
-          continue;
-
-        cb(_this.data[key], key, _this._getJsonKey(key));
-      }
-      return _this.json;
-    }
-  };
-
+}
+MyObject.prototype.toJson = function (context) {
+  // customise the context
+  ...
+  
+  // apply the context
   return context.apply(true);
-};
-
-var json = toJson(new MyClass());
-```
-
-### Advanced customisation
-It is often desirable to adjust the mapping process at various levels in the process.
-to-json mapping overrides can be applied to effect change at the following levels
-* Only to the current node
-* Only to the current nodes immediate children
-* Only to the current nodes decedents
-* To the current node and all its decedents
-```js
+}
 ```
 
