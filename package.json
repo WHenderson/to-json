@@ -1,14 +1,29 @@
 {
   "name": "to-json",
-  "version": "0.0.0",
-  "description": "Convert arbitrary types to json while providing mappings between the original data and the generated json",
+  "author": "Will Henderson <whenderson.github@gmail.com> (https://github.com/WHenderson)",
+  "version": "0.1.0-prerelease",
+  "description": "Provides a consistent mechanism for mapping complex javascript data to json. This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.",
+  "keywords": [
+    "json",
+    "convert",
+    "conversion",
+    "mapping"
+  ],
+  "bugs": {
+    "url": "https://github.com/WHenderson/to-json/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WHenderson/to-json.git"
+  },
+  "homepage": "https://github.com/WHenderson/to-json#readme",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/gulp test",
     "prepublish": "node_modules/.bin/gulp test"
   },
   "author": "",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^3.0.0",
     "coffee-coverage": "^0.6.2",
