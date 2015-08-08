@@ -73,7 +73,7 @@ createUglifyPipe = (pipe) ->
 
 gulpClean = () ->
   gulp
-  .src(['lib/', 'coverage/'], { read: false })
+  .src(['dist/', 'coverage/'], { read: false })
   .pipe(gClean())
 
 gulpBuild = () ->
@@ -106,7 +106,7 @@ gulpBuild = () ->
         .pipe(gSourceMaps.write)
       )()
     ))
-  .pipe(gulp.dest('lib'))
+  .pipe(gulp.dest('dist'))
 
 gulpTestCoverage = () ->
   gulp
