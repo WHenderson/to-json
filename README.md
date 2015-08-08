@@ -3,6 +3,9 @@
 to-json provides a consistent mechanism for mapping complex javascript data to json.
 This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.
 
+[![Build Status](https://travis-ci.org/WHenderson/to-json.svg?branch=master)](https://travis-ci.org/WHenderson/to-json)
+[![Coverage Status](https://coveralls.io/repos/WHenderson/to-json/badge.svg?branch=master&service=github)](https://coveralls.io/github/WHenderson/to-json?branch=master)
+
 ## Installation
 
 ### Node
