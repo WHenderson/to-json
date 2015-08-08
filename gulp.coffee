@@ -11,7 +11,6 @@ gSourceMaps = require('gulp-sourcemaps')
 gRename = require('gulp-rename')
 gUglify = require('gulp-uglify')
 gCoffeeLint = require('gulp-coffeelint')
-gRunSequence = require('run-sequence')
 gCoverageEnforcer = require("gulp-istanbul-enforcer");
 
 pipeCoffee = gLazy()
