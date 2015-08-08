@@ -211,6 +211,7 @@ gulp.task('dist-git', ['dist-version'], (cb) ->
 
   exec('git add bower.json')
   exec('git add -f dist/to-json.coffee')
+  exec('git add -f dist/to-json.node.js')
   exec('git add -f dist/to-json.umd.js')
   exec('git add -f dist/to-json.umd.min.js')
   exec('git add -f dist/to-json.web.js')
