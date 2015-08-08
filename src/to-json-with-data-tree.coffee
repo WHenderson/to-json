@@ -12,7 +12,6 @@ class ToJsonWithDataTree extends ToJson
     if @json[jsonKey] != undefined
       @dataTree[childContext.jsonKey] = {
         id: childContext.dataKey
-        dataPath: childContext.dataPath().join('/')
         data: data
         convertedData: childContext.data
         json: @json[jsonKey]

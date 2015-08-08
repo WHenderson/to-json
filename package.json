@@ -1,7 +1,7 @@
 {
   "name": "to-json",
-  "author": "Will Henderson <whenderson.github@gmail.com> (https://github.com/WHenderson)",
-  "version": "0.2.0-prerelease",
+  "author": "",
+  "version": "0.3.0-prerelease",
   "description": "Provides a consistent mechanism for mapping complex javascript data to json. This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.",
   "keywords": [
     "json",
@@ -22,7 +22,6 @@
     "test": "node_modules/.bin/gulp test",
     "prepublish": "node_modules/.bin/gulp test"
   },
-  "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^3.0.0",
@@ -34,6 +33,7 @@
     "gulp-coffee": "^2.3.1",
     "gulp-coffeelint": "^0.5.0",
     "gulp-concat": "^2.6.0",
+    "gulp-istanbul-enforcer": "^1.0.3",
     "gulp-mirror": "^0.4.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.5.2",

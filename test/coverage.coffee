@@ -380,14 +380,12 @@ suite('coverage', () ->
             "0": {
               "convertedData": 5
               "data": 5
-              "dataPath": "a/0"
               "id": 0
               "json": 5
             }
             "1": {
               "convertedData": 7
               "data": 7
-              "dataPath": "a/2"
               "id": 2
               "json": 7
             }
@@ -404,7 +402,6 @@ suite('coverage', () ->
             7
             8
           ]
-          "dataPath": "a"
           "id": "a"
           "json": [
             5

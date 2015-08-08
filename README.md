@@ -24,7 +24,7 @@ console.log(toJson([1,2,3]));
 ```html
 <html>
     <head>
-        <script type="text/javascript" src="to-json.min.js"></script>
+        <script type="text/javascript" src="to-json.web.min.js"></script>
     </head>
     <body>
         <script>
@@ -36,9 +36,14 @@ console.log(toJson([1,2,3]));
 
 ### web (amd)
 ```js
+require.config({
+  paths: {
+      "to-json": "to-json.web.min.js"
+  }
+});
 require(['to-json'], function (toJson) {
     console.log(toJson([1,2,3]));
-})
+});
 ```
 
 ## Simple Usage
@@ -231,7 +236,7 @@ MyObject.prototype.toJSON = function () {
 MyObject.prototype.toJson = function (context) {
   // customise the context
   ...
-  
+
   // apply the context
   return context.apply(true);
 }
