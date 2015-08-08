@@ -81,15 +81,15 @@ Produce a 1:1 map of json paths to input data.
 ```js
 var context = new toJson.WithDataMap([1,2,3]);
 var json = context.apply();
-var dataMap = context.pathMap;
+var dataMap = context.dataMap;
 ```
 
 ### Data Tree
-Produce a mapping tree of json key/index to data key/index and input data.
+Produce a mapping tree of json key/index to data key/index of input data.
 ```js
 var context = new toJson.WithDataTree([1,2,3]);
 var json = context.apply();
-var dataTree = context.pathTree;
+var dataTree = context.dataTree;
 ```
 
 ## Advanced Usage
