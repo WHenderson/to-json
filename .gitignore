@@ -6,7 +6,7 @@ coverage
 node_modules
 
 # built libs - need to include for bower. yuk!
-# lib
+dist
 
 # IDE
 .idea

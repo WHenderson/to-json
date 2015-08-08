@@ -100,8 +100,7 @@ suite('coverage', () ->
     )
 
   setup(() ->
-    #toJson = require('../index.js')
-    toJson = require('../lib/to-json.coffee')
+    toJson = require('../dist/to-json.coffee')
   )
 
   suite('vanilla', () ->

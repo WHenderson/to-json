@@ -73,7 +73,7 @@ createUglifyPipe = (pipe) ->
 
 gulpClean = () ->
   gulp
-  .src(['lib/', 'coverage/'], { read: false })
+  .src(['dist/', 'coverage/'], { read: false })
   .pipe(gClean())
 
 gulpBuild = () ->
@@ -106,7 +106,7 @@ gulpBuild = () ->
         .pipe(gSourceMaps.write)
       )()
     ))
-  .pipe(gulp.dest('lib'))
+  .pipe(gulp.dest('dist'))
 
 gulpTestCoverage = () ->
   gulp
@@ -190,4 +190,50 @@ gulp.task('chained-complete', ['chained-test-examples'], (cb) ->
 
 gulp.task('test', ['chained-test-examples'], (cb) ->
   cb()
+)
+
+gulp.task('dist', (taskCb) -> #['chained-complete'], (cb) ->
+  fs = require('fs')
+  git = require('git-cli')
+
+  cfgNpm = require('./package.json')
+  cfgBower = require('./bower.json')
+  cfgBower.version = cfgNpm.version
+
+  fs.writeFileSync('./bower.json', JSON.stringify(cfgBower, null, '  '))
+
+  git.Repository.init('./', (err, repo) ->
+    repo.add(['bower.json'], (err) ->
+      repo.add(
+        [
+          'dist/to-json.coffee',
+          'dist/to-json.node.js',
+          'dist/to-json.umd.js',
+          'dist/to-json.umd.min.js',
+          'dist/to-json.web.js',
+          'dist/to-json.web.min.js'
+        ],
+        { f: true },
+        (err) ->
+          repo.commit("Version #{cfgBower.version} for distribution", (err) ->
+            taskCb()
+          )
+      )
+    )
+  )
+
+
+
+  #console.log('To publish, run:');
+  #console.log('    git add bower.json');
+  #console.log('    git add -f ' + distConfig.debug);
+  #console.log('    git add -f ' + distConfig.min);
+  #console.log('    git checkout head');
+  #console.log('    git commit -m \'Version ' + version + ' for distribution\'');
+  #console.log('    git tag -a v' + version + ' -m \'Add tag v' + version + '\'');
+  #console.log('    git checkout master');
+  #console.log('    git push origin --tags');
+
+  #cb()
+  return
 )
