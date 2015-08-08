@@ -11,6 +11,8 @@ gSourceMaps = require('gulp-sourcemaps')
 gRename = require('gulp-rename')
 gUglify = require('gulp-uglify')
 gCoffeeLint = require('gulp-coffeelint')
+gRunSequence = require('run-sequence')
+gCoverageEnforcer = require("gulp-istanbul-enforcer");
 
 pipeCoffee = gLazy()
 .pipe(gUmd, {
@@ -31,7 +33,7 @@ pipeNode = gLazy()
     'toJson'
 })
 .pipe(gRename, {
-    suffix: '-node'
+    suffix: '.node'
 })
 
 pipeBrowser = gLazy()
@@ -43,7 +45,7 @@ pipeBrowser = gLazy()
     'toJson'
 })
 .pipe(gRename, {
-  suffix: '-web'
+  suffix: '.web'
 })
 
 pipeUmd = gLazy()
@@ -55,7 +57,7 @@ pipeUmd = gLazy()
     'toJson'
 })
 .pipe(gRename, {
-  suffix: '-umd'
+  suffix: '.umd'
 })
 
 createUglifyPipe = (pipe) ->
@@ -70,48 +72,44 @@ createUglifyPipe = (pipe) ->
       return
   )
 
-gulp.task('clean', () ->
+gulpClean = () ->
   gulp
   .src(['lib/', 'coverage/'], { read: false })
   .pipe(gClean())
-)
 
-gulp.task('build', ['clean'], () ->
+gulpBuild = () ->
   gulp
   .src([
-    'src/to-json.coffee',
-    'src/to-json-with-path-map.coffee'
-    'src/to-json-with-path-tree.coffee'
-    'src/to-json-with-data-map.coffee'
-    'src/to-json-with-data-tree.coffee'
+      'src/to-json.coffee',
+      'src/to-json-with-path-map.coffee'
+      'src/to-json-with-path-tree.coffee'
+      'src/to-json-with-data-map.coffee'
+      'src/to-json-with-data-tree.coffee'
   ])
   .pipe(gConcat('to-json.coffee', {newLine: '\r\n'}))
   .pipe(gCoffeeLint())
   .pipe(gCoffeeLint.reporter())
   .pipe(gMirror(
-    pipeCoffee(),
-    (
-      gLazy()
-      .pipe(gSourceMaps.init)
-      .pipe(gConcat, 'to-json.coffee')
-      .pipe(gCoffee, { bare: true })
-      .pipe(
-        gMirror,
-        pipeNode(),
-        pipeBrowser(),
-        pipeUmd(),
-        createUglifyPipe(pipeBrowser)(),
-        createUglifyPipe(pipeUmd)()
-      )
-      .pipe(gSourceMaps.write)
-    )()
-  ))
+      pipeCoffee(),
+      (
+        gLazy()
+        .pipe(gSourceMaps.init)
+        .pipe(gConcat, 'to-json.coffee')
+        .pipe(gCoffee, { bare: true })
+        .pipe(
+          gMirror,
+          pipeNode(),
+          pipeBrowser(),
+          pipeUmd(),
+          createUglifyPipe(pipeBrowser)(),
+          createUglifyPipe(pipeUmd)()
+        )
+        .pipe(gSourceMaps.write)
+      )()
+    ))
   .pipe(gulp.dest('lib'))
-  #.on('error', gUtil.log)
 
-)
-
-gulp.task('test', ['build'], () ->
+gulpTestCoverage = () ->
   gulp
   .src(
     [
@@ -123,9 +121,74 @@ gulp.task('test', ['build'], () ->
   )
   .pipe(gMocha({
     debugBrk: false
-    r: 'test/setup.js'
+    r: 'test/coverage-setup.js'
     R: 'spec'
     u: 'tdd'
-    istanbul: true
+    istanbul: {
+
+    }
   }))
+  .pipe(gCoverageEnforcer({
+    thresholds : {
+      statements : 100,
+      branches : 100,
+      lines : 100,
+      functions : 100
+    },
+    coverageDirectory : 'coverage',
+    rootDirectory : ''
+  }))
+
+gulpTestExamples = () ->
+  gulp
+  .src(
+    [
+      'test/examples.coffee'
+    ],
+    {
+      read: false
+    }
+  )
+  .pipe(gMocha({
+    debugBrk: false
+    r: 'test/examples-setup.js'
+    R: 'spec'
+    u: 'tdd'
+    istanbul: false
+  }))
+
+gulp.task('discrete-clean', () ->
+  gulpClean()
+)
+
+gulp.task('discrete-build', () ->
+  gulpBuild()
+)
+
+gulp.task('discrete-test-coverage', () ->
+  gulpTestCoverage()
+)
+
+gulp.task('discrete-test-examples', () ->
+  gulpTestExamples()
+)
+
+gulp.task('chained-clean', () ->
+  gulpClean()
+)
+gulp.task('chained-build', ['chained-clean'], () ->
+  gulpBuild()
+)
+gulp.task('chained-test-coverage', ['chained-build'], () ->
+  gulpTestCoverage()
+)
+gulp.task('chained-test-examples', ['chained-test-coverage'], () ->
+  gulpTestExamples()
+)
+gulp.task('chained-complete', ['chained-test-examples'], (cb) ->
+  cb()
+)
+
+gulp.task('test', ['chained-test-examples'], (cb) ->
+  cb()
 )

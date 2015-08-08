@@ -1,1 +1,1 @@
-module.exports = require('./lib/to-json-node.js');
+module.exports = require('./lib/to-json.node.js');
