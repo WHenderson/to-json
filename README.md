@@ -54,11 +54,46 @@ When converting data, the toJson and toJSON methods are used wherever they are f
 var json = toJson([1,2,3]);
 ```
 
+## IO Mapping Usage
+Convert data to json whilst simulataniously producing a mapping object.
+
+### Path Map
+Produce a 1:1 map of json path to data path strings.
+```js
+var context = new toJson.WithPathMap([1,2,3]);
+var json = context.apply();
+var pathMap = context.pathMap;
+```
+
+### Path Tree
+Produce a mapping tree of json key/index to data key/index.
+```js
+var context = new toJson.WithPathTree([1,2,3]);
+var json = context.apply();
+var pathTree = context.pathTree;
+```
+
+### Data Map
+Produce a 1:1 map of json paths to input data.
+```js
+var context = new toJson.WithDataMap([1,2,3]);
+var json = context.apply();
+var dataMap = context.pathMap;
+```
+
+### Data Tree
+Produce a mapping tree of json key/index to data key/index and input data.
+```js
+var context = new toJson.WithDataTree([1,2,3]);
+var json = context.apply();
+var dataTree = context.pathTree;
+```
+
 ## Advanced Usage
 Customise the mapping process before converting data to json.
 
 ```js
-context = new toJson([1,2,3]);
+var context = new toJson([1,2,3]);
 
 // customise the context
 
