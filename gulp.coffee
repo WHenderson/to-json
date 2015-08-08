@@ -192,9 +192,8 @@ gulp.task('test', ['chained-test-examples'], (cb) ->
   cb()
 )
 
-gulp.task('dist', (taskCb) -> #['chained-complete'], (cb) ->
+gulp.task('dist-version', ['chained-complete'], (cb) ->
   fs = require('fs')
-  git = require('git-cli')
 
   cfgNpm = require('./package.json')
   cfgBower = require('./bower.json')
@@ -202,38 +201,26 @@ gulp.task('dist', (taskCb) -> #['chained-complete'], (cb) ->
 
   fs.writeFileSync('./bower.json', JSON.stringify(cfgBower, null, '  '))
 
-  git.Repository.init('./', (err, repo) ->
-    repo.add(['bower.json'], (err) ->
-      repo.add(
-        [
-          'dist/to-json.coffee',
-          'dist/to-json.node.js',
-          'dist/to-json.umd.js',
-          'dist/to-json.umd.min.js',
-          'dist/to-json.web.js',
-          'dist/to-json.web.min.js'
-        ],
-        { f: true },
-        (err) ->
-          repo.commit("Version #{cfgBower.version} for distribution", (err) ->
-            taskCb()
-          )
-      )
-    )
-  )
+  cb()
+  return
+)
 
+gulp.task('dist-git', ['dist-version'], (cb) ->
+  exec = require('child_process').execSync
+  cfgNpm = require('./package.json')
 
+  exec('git add bower.json')
+  exec('git add -f dist/to-json.coffee')
+  exec('git add -f dist/to-json.umd.js')
+  exec('git add -f dist/to-json.umd.min.js')
+  exec('git add -f dist/to-json.web.js')
+  exec('git add -f dist/to-json.web.min.js')
+  exec('git checkout head')
+  exec("git commit -m \"Version #{cfgNpm.version} for distribution\"")
+  exec("git tag -a v#{cfgNpm.version} -m \"Add tag v#{cfgNpm.version}\"")
+  exec('git checkout master')
+  exec('git push origin --tags')
 
-  #console.log('To publish, run:');
-  #console.log('    git add bower.json');
-  #console.log('    git add -f ' + distConfig.debug);
-  #console.log('    git add -f ' + distConfig.min);
-  #console.log('    git checkout head');
-  #console.log('    git commit -m \'Version ' + version + ' for distribution\'');
-  #console.log('    git tag -a v' + version + ' -m \'Add tag v' + version + '\'');
-  #console.log('    git checkout master');
-  #console.log('    git push origin --tags');
-
-  #cb()
+  cb()
   return
 )
