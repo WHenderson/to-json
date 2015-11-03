@@ -1,6 +1,6 @@
 {
   "name": "to-json",
-  "author": "",
+  "author": "Will Henderson <whenderson.github@gmail.com> (https://github.com/WHenderson)",
   "version": "0.4.0-prerelease",
   "description": "Provides a consistent mechanism for mapping complex javascript data to json. This mechanism allows for complex filtering, data conversion, and two-way mapping between the input and output data.",
   "keywords": [
