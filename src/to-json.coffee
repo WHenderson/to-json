@@ -127,10 +127,11 @@ class ToJson
 
   # utility function for chaining super methods
   _super: (name) ->
-    if @[name] != @constructor.prototype[name]
-      return @constructor.prototype[name]
-    else
-      return @constructor.__super__?[name]
+    current = @[name]
+    cls = @constructor
+    while cls? and cls.prototype[name] == current
+      cls = cls.__super__.constructor
+    return cls.prototype[name]
 
   _callSuper: (name, args...) ->
     @_super(name).apply(@, args)
