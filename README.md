@@ -275,8 +275,8 @@ MyObject.prototype.toJson = function (context) {
   // customise the context
   ...
 
-  // apply the context
-  return context.apply(true);
+  // return the context
+  return context;
 }
 ```
 

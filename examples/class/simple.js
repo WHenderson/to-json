@@ -9,6 +9,10 @@ MyClass.prototype.toJSON = function () {
   return toJson(this);
 };
 MyClass.prototype.toJson = function (context) {
+  if (context == null) {
+    context = new toJson(this);
+  }
+
   var _this = this;
   context._getEnumeratorObject = function () {
     var _this = this;
@@ -27,7 +31,7 @@ MyClass.prototype.toJson = function (context) {
     }
   };
 
-  return context.apply(true);
+  return context;
 };
 
 var json = toJson(new MyClass());

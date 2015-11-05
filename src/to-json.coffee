@@ -38,7 +38,7 @@ class ToJson
   # Converts @data into json
   _toJson: (excludeCustomToJson) ->
     if not excludeCustomToJson and @data?.toJson? and typeof @data.toJson == 'function'
-      @json = @data.toJson(@)
+      @data.toJson(@).apply(true)
     else if not excludeCustomToJson and @data?.toJSON? and typeof @data.toJSON == 'function'
       @json = @data.toJSON()
     else

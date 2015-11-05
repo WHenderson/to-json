@@ -8,11 +8,12 @@ class MyUpperClass
     toJson(@)
 
   toJson: (context) ->
+    context ?= new toJson(@)
     context._getJsonKey = (dataKey) ->
       dataKey = @_callSuper('_getJsonKey', dataKey)
       return dataKey.toUpperCase()
 
-    return context.apply(true)
+    return context
 
 class MyDoubleClass
   constructor: (@a, @b) ->
@@ -25,7 +26,7 @@ class MyDoubleClass
       dataKey = @_callSuper('_getJsonKey', dataKey)
       return dataKey + dataKey
 
-    return context.apply(true)
+    return context
 
 
 data = new MyUpperClass(

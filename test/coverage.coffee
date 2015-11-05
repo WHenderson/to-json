@@ -100,7 +100,8 @@ suite('coverage', () ->
     )
 
   setup(() ->
-    toJson = require('../dist/to-json.coffee')
+    #toJson = require('../dist/to-json.coffee')
+    toJson = require('../index')
   )
 
   suite('vanilla', () ->
@@ -182,13 +183,20 @@ suite('coverage', () ->
       {}
     )
 
+    class MyClass
+      constructor: () ->
+        @a = 1
+
+      toJson: (context) ->
+        context ?= new toJson.WithDataMap(@)
+        return context
+
     confirm(
       'toJson',
+      new MyClass(),
       {
-        toJson: (context) ->
-          'custom value'
+        a: 1
       },
-      'custom value',
       {}
     )
   )
