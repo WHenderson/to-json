@@ -7,7 +7,7 @@ class MyUpperClass
   toJSON: () ->
     toJson(@)
 
-  toJson: (context) ->
+  toJsonContext: (context) ->
     context ?= new toJson(@)
     context._getJsonKey = (dataKey) ->
       dataKey = @_callSuper('_getJsonKey', dataKey)
@@ -21,7 +21,7 @@ class MyDoubleClass
   toJSON: () ->
     toJson(@)
 
-  toJson: (context) ->
+  toJsonContext: (context) ->
     context._getJsonKey = (dataKey) ->
       dataKey = @_callSuper('_getJsonKey', dataKey)
       return dataKey + dataKey

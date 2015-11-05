@@ -8,7 +8,7 @@ function MyClass() {
 MyClass.prototype.toJSON = function () {
   return toJson(this);
 };
-MyClass.prototype.toJson = function (context) {
+MyClass.prototype.toJsonContext = function (context) {
   if (context == null) {
     context = new toJson(this);
   }

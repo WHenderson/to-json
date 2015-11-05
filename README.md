@@ -271,7 +271,7 @@ MyObject.prototype.c = 3;
 MyObject.prototype.toJSON = function () {
   return toJson(this);
 }
-MyObject.prototype.toJson = function (context) {
+MyObject.prototype.toJsonContext = function (context) {
   // customise the context
   ...
 

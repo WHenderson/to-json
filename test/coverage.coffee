@@ -186,13 +186,18 @@ suite('coverage', () ->
     class MyClass
       constructor: () ->
         @a = 1
+        @b = 2
 
-      toJson: (context) ->
+      toJsonContext: (context) ->
         context ?= new toJson.WithDataMap(@)
+        context.adjustChildContexts({
+          _exclude: () ->
+            return @dataKey == 'b'
+        })
         return context
 
     confirm(
-      'toJson',
+      'toJsonContext',
       new MyClass(),
       {
         a: 1
